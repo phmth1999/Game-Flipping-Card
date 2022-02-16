@@ -1,9 +1,12 @@
 package View;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
@@ -11,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -20,7 +25,6 @@ import Factory.CardFactory;
 import Model.Card;
 
 public class GameWindow extends JFrame implements Runnable, WindowListener {
-
 	private boolean gameRun;
 	private int gridSize;
 
@@ -64,16 +68,31 @@ public class GameWindow extends JFrame implements Runnable, WindowListener {
 		Collections.shuffle(cards);
 
 		CardController controller = new CardController(this, gridSize);
-
+		
+		
+		
 		for (Card c : cards) {
-			c.setController(controller);
+			c.setPreferredSize(new Dimension(220, 220));
+			c.setBackground(new Color(230, 230, 230));
+			ImageIcon image = new ImageIcon("src/images/cardBack.png");
+			Image tmp = image.getImage();
+			ImageIcon icon = new ImageIcon(tmp.getScaledInstance(220, 220, Image.SCALE_SMOOTH));
+			c.setIcon(icon);
+			
+			c.addActionListener(ActionEvent -> {
+				if (c.isClickable()==true) {
+					c.cardFlip();
+					c.showImage();
+					controller.getCards(c);
+				}
+			});
+			
 			controller.collectAllCards(c);
 			gameBoard.add(c);
 		}
 
 		add(gameBoard);
 	}
-
 	// giao diện thời gian
 	private void initTimerPanel() {
 

@@ -1,49 +1,32 @@
 package Model;
 
-import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Image;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
-import Controller.CardController;
-
 public class Card extends JButton {
-
-	private CardController controller;
-
-	private ImageIcon imageChuaLatHinh;
-	private MyImageIcon imageDaLatHinh;
-
+	private ImageIcon imageIcon;
+	private MyImageIcon imageHinh;
 	private int cardID;
+
 	private boolean cardUp;
-	private boolean clickable;
+	private boolean clickable = true;
 
-	public Card(ImageIcon imageChuaLatHinh, MyImageIcon imageDaLatHinh, int cardID) {
+	public Card(ImageIcon imageIcon, MyImageIcon imageHinh, int cardID) {
 
-		this.imageChuaLatHinh = imageChuaLatHinh;
-		this.imageDaLatHinh = imageDaLatHinh;
+		this.imageIcon = imageIcon;
+		this.imageHinh = imageHinh;
 		this.cardID = cardID;
 
-		clickable = true;
-		cardUp = false;
+	}
 
-		setPreferredSize(new Dimension(220, 220));
-		setBackground(new Color(230, 230, 230));
+	public boolean isClickable() {
+		return clickable;
+	}
 
-		ImageIcon image = new ImageIcon("src/images/cardBack.png");
-		Image tmp = image.getImage();
-		ImageIcon icon = new ImageIcon(tmp.getScaledInstance(220, 220, Image.SCALE_SMOOTH));
-		setIcon(icon);
-
-		addActionListener(ActionEvent -> {
-			if (clickable) {
-				cardFlip();
-				showImage();
-				controller.getCards(this);
-			}
-		});
+	public void setClickable(boolean clickable) {
+		this.clickable = clickable;
 	}
 
 	// lấy cardID
@@ -61,9 +44,9 @@ public class Card extends JButton {
 	// hiển thị hình ảnh
 	public void showImage() {
 		if (cardUp) {
-			setIcon(resizeIcon(imageDaLatHinh, this.getWidth(), getHeight()));
+			setIcon(resizeIcon(imageHinh, this.getWidth(), getHeight()));
 		} else
-			setIcon(resizeIcon(imageChuaLatHinh, this.getWidth(), getHeight()));
+			setIcon(resizeIcon(imageIcon, this.getWidth(), getHeight()));
 	}
 
 	// lật thẻ
@@ -72,21 +55,6 @@ public class Card extends JButton {
 			cardUp = false;
 		else
 			cardUp = true;
-	}
-
-	// đặt lại controller
-	public void setController(CardController controller) {
-		this.controller = controller;
-	}
-
-	// không thể nhấp
-	public void setClickableOff() {
-		this.clickable = false;
-	}
-
-	// có thể nhấp
-	public void setClickableOn() {
-		this.clickable = true;
 	}
 
 }
